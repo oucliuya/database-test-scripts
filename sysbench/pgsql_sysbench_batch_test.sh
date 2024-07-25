@@ -1,5 +1,5 @@
 # operations include: prepare/cleanup/readwrite/readonly/writeonly/read_notrx
-operation=writeonly
+operation=readwrite
 host=127.0.0.1
 port=3306
 pgsql_user=admin
@@ -7,9 +7,9 @@ password=password123
 table_count=16
 table_size=10000000
 # seconds that each test run
-run_time=600
+run_time=300
 # the interval between each tests
-run_interval=30
+run_interval=90
 db=sbtest
 # a set of concurrency apply to multi tests
 threads=(4 8 16 32 64 128 256 512)
