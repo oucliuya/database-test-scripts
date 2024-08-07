@@ -18,18 +18,22 @@ threads=(4 8 16 32 64 128 256 512)
 
 sysbench_prepare () {
    echo -e "[preparing data]"
+   echo "start test:`date`"
    sysbench --db-driver=pgsql --pgsql-host=$host \
    --pgsql-port=$port --pgsql-user=$pgsql_user --pgsql-password=$password \
    --pgsql-db=$db --table_size=$table_size --tables=$table_count \
    --threads=$table_count oltp_read_write prepare
+   echo "end test:`date`"
 }
 
 sysbench_cleanup () {
   echo -e "[cleaning data]"
+  echo "start test:`date`"
   sysbench --db-driver=pgsql --pgsql-host=$host \
   --pgsql-port=$port --pgsql-user=$pgsql_user --pgsql-password=$password \
   --pgsql-db=$db --table_size=$table_size --tables=$table_count \
   --threads=$table_count oltp_read_write cleanup
+  echo "end test:`date`"
 }
 
 sysbench_readwrite () {
@@ -37,11 +41,13 @@ sysbench_readwrite () {
   for num_threads in ${threads[@]}; do
     echo "-------------------------------------------"
     echo running readwrite with threads number: $num_threads
+    echo "start test:`date`"
       sysbench --db-driver=pgsql --pgsql-host=$host \
       --pgsql-port=$port --pgsql-user=$pgsql_user --pgsql-password=$password \
       --pgsql-db=$db --table_size=$table_size --rand-type=uniform \
       --tables=$table_count --time=$run_time --threads=$num_threads \
       --report-interval=20 oltp_read_write run
+    echo "end test:`date`"
     sleep $run_interval
   done
 }
@@ -52,11 +58,13 @@ sysbench_readonly () {
   for num_threads in ${threads[@]}; do
     echo "-------------------------------------------"
     echo running readonly with threads number: $num_threads
+    echo "start test:`date`"
       sysbench --db-driver=pgsql --pgsql-host=$host \
       --pgsql-port=$port --pgsql-user=$pgsql_user --pgsql-password=$password \
       --pgsql-db=$db --table_size=$table_size --rand-type=uniform \
       --tables=$table_count --time=$run_time --threads=$num_threads \
       --report-interval=20 oltp_read_only run
+    echo "end test:`date`"
     sleep $run_interval
   done
 }
@@ -66,11 +74,13 @@ sysbench_writeonly () {
   for num_threads in ${threads[@]}; do
     echo "-------------------------------------------"
     echo running writeonly with threads number: $num_threads
+    echo "start test:`date`"
       sysbench --db-driver=pgsql --pgsql-host=$host \
       --pgsql-port=$port --pgsql-user=$pgsql_user --pgsql-password=$password \
       --pgsql-db=$db --table_size=$table_size --rand-type=uniform \
       --tables=$table_count --time=$run_time --threads=$num_threads \
       --report-interval=20 oltp_write_only run
+    echo "end test:`date`"
     sleep $run_interval
   done
 }
@@ -80,12 +90,15 @@ sysbench_read_notrx () {
   for num_threads in ${threads[@]}; do
     echo "-------------------------------------------"
     echo running no transaction read with threads number: $num_threads
+    echo "start test:`date`"
       /usr/bin/sysbench --pgsql-host=$host --pgsql-port=$port \
       --pgsql-user=$pgsql_user --pgsql-password=$password --pgsql-db=$db \
       --oltp-tables-count=$table_count --oltp-table-size=$table_size --threads=$num_threads \
       --events=1000000000 --report-interval=10 --time=$run_time \
       --oltp-read-only=on \
       --oltp-skip-trx=on \
+      /usr/share/sysbench/tests/include/oltp_legacy/oltp.lua run
+    echo "end test:`date`"
     sleep $run_interval
   done
 }
