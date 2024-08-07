@@ -112,7 +112,7 @@ elif [[ ${operation} == 'readwrite' ]]; then
 elif [[ ${operation} == 'readonly' ]]; then
     sysbench_readonly
 elif [[ ${operation} == 'writeonly' ]]; then
-    sysbench_readwrite
+    sysbench_writeonly
 elif [[ ${operation} == 'all' ]]; then
     sysbench_readwrite
     echo "###############################################"
